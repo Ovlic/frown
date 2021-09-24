@@ -20,7 +20,21 @@
                 e.preventDefault()
                 pass = document.getElementById("passkey").value
                 console.log(`pass: '${pass}'`)
-                key = await fetch("https://raw.githubusercontent.com/Ovlic/frown/main/passkey").then(response => response.text()).then(result => result)
+
+                var myHeaders = new Headers();
+                myHeaders.append("Content-Type", "text/plain");
+
+                var requestOptions = {
+                method: 'GET',
+                headers: myHeaders,
+                redirect: 'follow'
+                };
+
+                var key = fetch("https://raw.githubusercontent.com/Ovlic/frown/main/passkey", requestOptions)
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
+                // key = await fetch("https://raw.githubusercontent.com/Ovlic/frown/main/passkey").then(response => response.text()).then(result => result)
                 key = key.replace(`\n`, "")
                 console.log(`key: '${key}'`)
                 if(pass === key){
