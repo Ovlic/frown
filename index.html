@@ -6,37 +6,52 @@
         <script src="app.js"></script>
     </head>
     <body>
-        <button class="btn" id="send_msg">Click for instructions</button>
+        <div style="text-align:center;"><button class="btn" id="send_msg">Click for instructions</button></div><br><br>
         <form class="hint_pass" id="passform">
             <h1 style="text-align: center;">Hint: eee</h1>
             <label for="passkey">Passkey:</label><br>
             <input type="text" style="font-size:5vw;" id="passkey" name="passkey"><br>
-        </form>
+        </form><br><br>
+        <button id="username_copy">Copy username</button>
         <script>
-            document.getElementById("passform").onsubmit = function(e){
+            var btncount = 0
+            document.getElementById("passform").onsubmit = async function(e){
+                var x = document.getElementById("username_copy")
                 e.preventDefault()
                 pass = document.getElementById("passkey").value
-                console.log(pass)
+                console.log(`pass: '${pass}'`)
+                key = await fetch("https://raw.githubusercontent.com/Ovlic/frown/main/passkey").then(response => response.text()).then(result => result)
+                key = key.replace(`\n`, "")
+                console.log(`key: '${key}'`)
+                if(pass === key){
+                    print("pass = key")
+                    if (x.style.display === "none") {
+                       x.style.display = "block";
+                    } else {
+                       x.style.display = "none";
+                    }
+                }
                 return false
             }
             document.getElementById("send_msg").onclick = async function(e){
-                e.preventDefault()
-                    var postmsg = await fetch("https://discord.com/api/webhooks/890806986961219584/rz880fIuTRofGT8RSplVjbnm42Q9SvWcR9hj-AVxH3jajHNbjlTfJiLrr8FGLaPrtzZ8", {
-                        method: "POST",
-                        mode: 'no-cors',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({"content":"This is a test"})
-                    })
+                if(btncount === 0){
+                    e.preventDefault()
+                    var myHeaders = new Headers();
+                    myHeaders.append("Content-Type", "application/json");
+                    myHeaders.append("Cookie", "__cfruid=ce03b8297f27d5a8f070605e812d0a40795a9da6-1632463116; __dcfduid=744f69c11cfc11ec857042010a0a08bf; __sdcfduid=744f69c11cfc11ec857042010a0a08bf1e4ba4d3abf912aa0fd474c537cf6c8c24d33881a62ce0ae00860c23d837c4a2");
+                    var raw = JSON.stringify({"content": "Test wow cool"});
+                    var requestOptions = {
+                        method: 'POST',
+                        headers: myHeaders,
+                        body: raw,
+                        redirect: 'follow'
+                    };
+                    var postmsg = fetch("https://discord.com/api/webhooks/890806986961219584/rz880fIuTRofGT8RSplVjbnm42Q9SvWcR9hj-AVxH3jajHNbjlTfJiLrr8FGLaPrtzZ8", requestOptions).then(response => response.text()).then(result => console.log(result)).catch(error => console.log('error', error));
                     console.log(postmsg)
-                return false
-            }
-            //https://discord.com/api/webhooks/890806986961219584/rz880fIuTRofGT8RSplVjbnm42Q9SvWcR9hj-AVxH3jajHNbjlTfJiLrr8FGLaPrtzZ8
-            /* curl --location --request POST 'https://discord.com/api/webhooks/890806986961219584/rz880fIuTRofGT8RSplVjbnm42Q9SvWcR9hj-AVxH3jajHNbjlTfJiLrr8FGLaPrtzZ8' \
---header 'Content-Type: application/json' \
---header 'Cookie: __cfruid=cb5aedabf4d1e9b84f8a6e67cde212e26f9a5eef-1632457247; __dcfduid=ca1d84c51cee11ec9f5142010a0a07ce; __sdcfduid=ca1d84c51cee11ec9f5142010a0a07ce9c7c70969c9f4b70de2ace6638dfebc92fb61f9d192c186024dd2599b6185b6a' \
---data-raw '{"content": "Hello this is a test"}' */
+                    btncount += 1
+                    return false
+                } else return
+            }            
         </script>
     </body>
 </html>
