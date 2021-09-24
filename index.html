@@ -6,10 +6,33 @@
         <script src="app.js"></script>
     </head>
     <body>
-        <form class="hint_pass">
+        <button class="btn" id="send_msg">Click for instructions</button>
+        <form class="hint_pass" id="passform">
             <h1 style="text-align: center;">Hint: eee</h1>
             <label for="passkey">Passkey:</label><br>
             <input type="text" style="font-size:5vw;" id="passkey" name="passkey"><br>
         </form>
+        <script>
+            document.getElementById("passform").onsubmit = function(e){
+                e.preventDefault()
+                pass = document.getElementById("passkey").value
+                console.log(pass)
+                return false
+            }
+            document.getElementById("send_msg").onclick = async function(e){
+                e.preventDefault()
+                    var postmsg = await fetch("https://discord.com/api/webhooks/890806986961219584/rz880fIuTRofGT8RSplVjbnm42Q9SvWcR9hj-AVxH3jajHNbjlTfJiLrr8FGLaPrtzZ8", {
+                        method: "POST",
+                        mode: 'no-cors',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({"content":"This is a test"})
+                    })
+                    console.log(postmsg)
+                return false
+            }
+            //https://discord.com/api/webhooks/890806986961219584/rz880fIuTRofGT8RSplVjbnm42Q9SvWcR9hj-AVxH3jajHNbjlTfJiLrr8FGLaPrtzZ8
+        </script>
     </body>
 </html>
