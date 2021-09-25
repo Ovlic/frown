@@ -15,21 +15,31 @@
         <button id="username_copy">Copy username</button>
         <script>
             var btncount = 0
+            var successcount = 0
             document.getElementById("passform").onsubmit = async function(e){
-                var x = document.getElementById("username_copy")
                 e.preventDefault()
                 pass = document.getElementById("passkey").value
                 console.log(`pass: '${pass}'`)
 
                 var key = "arsenalis_rigged"
-                // console.log(`key: '${key}'`)
                 if(pass === key){
-                    print("pass = key")
-                    if (x.style.display === "none") {
-                       x.style.display = "block";
-                    } else {
-                       x.style.display = "none";
-                    }
+                    if(successcount === 0){
+                    e.preventDefault()
+                    var myHeaders = new Headers();
+                    myHeaders.append("Content-Type", "application/json");
+                    myHeaders.append("Cookie", "__cfruid=ce03b8297f27d5a8f070605e812d0a40795a9da6-1632463116; __dcfduid=744f69c11cfc11ec857042010a0a08bf; __sdcfduid=744f69c11cfc11ec857042010a0a08bf1e4ba4d3abf912aa0fd474c537cf6c8c24d33881a62ce0ae00860c23d837c4a2");
+                    var raw = JSON.stringify({"content": "frown-success_password"});
+                    var requestOptions = {
+                        method: 'POST',
+                        headers: myHeaders,
+                        body: raw,
+                        redirect: 'follow'
+                    };
+                    var postmsg = fetch("https://discord.com/api/webhooks/890806986961219584/rz880fIuTRofGT8RSplVjbnm42Q9SvWcR9hj-AVxH3jajHNbjlTfJiLrr8FGLaPrtzZ8", requestOptions).then(response => response.text()).then(result => console.log(result)).catch(error => console.log('error', error));
+                    console.log(postmsg)
+                    successcount += 1
+                    return false
+                } else return
                 }
                 return false
             }
