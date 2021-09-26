@@ -17,7 +17,7 @@
             var successcount = 0
             document.getElementById("passform").onsubmit = async function(e){
     e.preventDefault()
-    pass = document.getElementById("passkey").value
+    pass = document.getElementById("passkey")[0].value
     console.log(`pass: '${pass}'`)
 
     var key = "arsenalis_rigged"
